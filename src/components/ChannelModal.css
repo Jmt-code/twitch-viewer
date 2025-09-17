@@ -317,3 +317,53 @@
     font-size: 16px;
   }
 }
+
+/* Sección de compartir */
+.share-section {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #404040;
+}
+
+.share-btn {
+  width: 100%;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.share-btn:hover {
+  background: linear-gradient(135deg, #4338ca 0%, #5b5be0 100%);
+  transform: translateY(-1px);
+}
+
+.share-btn:active {
+  transform: translateY(0);
+}
+
+.share-btn.copied {
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  animation: shareSuccess 0.3s ease-out;
+}
+
+@keyframes shareSuccess {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

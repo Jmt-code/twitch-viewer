@@ -117,12 +117,46 @@
   text-align: center;
 }
 
-.error-state p:first-child {
-  font-weight: 600;
+.error-state h4 {
+  margin: 8px 0;
   color: #ff4757;
+  font-size: 16px;
 }
 
-.error-state p:last-child {
+.error-state .error-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  opacity: 0.7;
+}
+
+.error-state p:last-of-type {
   font-size: 14px;
   color: #888;
+  margin-bottom: 16px;
+}
+
+.open-external-btn {
+  background: linear-gradient(135deg, #9146ff 0%, #7c3aed 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.open-external-btn:hover {
+  background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(145, 70, 255, 0.3);
+}
+
+.open-external-btn:active {
+  transform: translateY(0);
 }
