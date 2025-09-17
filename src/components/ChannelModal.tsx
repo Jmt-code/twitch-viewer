@@ -1,5 +1,6 @@
 import { useState, FormEvent, ChangeEvent } from 'react';
 import { Platform, Channel, PLATFORM_COLORS, PLATFORM_NAMES } from '../types';
+import { generateShareableURL } from '../utils/urlParams';
 import './ChannelModal.css';
 
 interface ChannelModalProps {
@@ -22,6 +23,7 @@ const ChannelModal: React.FC<ChannelModalProps> = ({
   const [inputValue, setInputValue] = useState<string>('');
   const [selectedPlatform, setSelectedPlatform] = useState<Platform>(Platform.TWITCH);
   const [isError, setIsError] = useState<boolean>(false);
+  const [showCopyConfirmation, setShowCopyConfirmation] = useState<boolean>(false);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -71,6 +73,24 @@ const ChannelModal: React.FC<ChannelModalProps> = ({
     }
   };
 
+  const handleCopyURL = async (): Promise<void> => {
+    try {
+      const shareableURL = generateShareableURL(channels);
+      await navigator.clipboard.writeText(shareableURL);
+      setShowCopyConfirmation(true);
+      
+      // Ocultar confirmación después de 2 segundos
+      setTimeout(() => {
+        setShowCopyConfirmation(false);
+      }, 2000);
+    } catch (error) {
+      console.error('Error al copiar URL:', error);
+      // Fallback para navegadores que no soportan clipboard API
+      const shareableURL = generateShareableURL(channels);
+      prompt('Copia esta URL:', shareableURL);
+    }
+  };
+
   if (!isOpen) return null;
 
   const isAtMaxCapacity = channels.length >= maxChannels;
@@ -92,28 +112,40 @@ const ChannelModal: React.FC<ChannelModalProps> = ({
             {channels.length === 0 ? (
               <p className="no-channels">No hay canales agregados</p>
             ) : (
-              <div className="channels-list">
-                {channels.map((channel) => (
-                  <div key={channel.id} className={`channel-item ${channel.platform}`}>
-                    <div className="channel-info">
-                      <span 
-                        className="platform-indicator"
-                        style={{ backgroundColor: PLATFORM_COLORS[channel.platform] }}
+              <>
+                <div className="channels-list">
+                  {channels.map((channel) => (
+                    <div key={channel.id} className={`channel-item ${channel.platform}`}>
+                      <div className="channel-info">
+                        <span 
+                          className="platform-indicator"
+                          style={{ backgroundColor: PLATFORM_COLORS[channel.platform] }}
+                        >
+                          {channel.platform === Platform.TWITCH ? 'T' : 'K'}
+                        </span>
+                        <span className="channel-name">{channel.name}</span>
+                      </div>
+                      <button 
+                        className="remove-channel-btn"
+                        onClick={() => handleRemoveChannel(channel.id)}
+                        title="Eliminar canal"
                       >
-                        {channel.platform === Platform.TWITCH ? 'T' : 'K'}
-                      </span>
-                      <span className="channel-name">{channel.name}</span>
+                        ✕
+                      </button>
                     </div>
-                    <button 
-                      className="remove-channel-btn"
-                      onClick={() => handleRemoveChannel(channel.id)}
-                      title="Eliminar canal"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+                
+                <div className="share-section">
+                  <button 
+                    className={`share-btn ${showCopyConfirmation ? 'copied' : ''}`}
+                    onClick={handleCopyURL}
+                    title="Copiar URL compartible"
+                  >
+                    {showCopyConfirmation ? '✓ Copiado!' : '🔗 Compartir configuración'}
+                  </button>
+                </div>
+              </>
             )}
           </div>
 

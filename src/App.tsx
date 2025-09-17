@@ -1,13 +1,38 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import StreamChannel from './components/StreamChannel';
 import ChannelModal from './components/ChannelModal';
 import FloatingButton from './components/FloatingButton';
 import { GridLayoutType, MAX_CHANNELS, Channel, Platform, createChannelId } from './types';
+import { 
+  getChannelsFromURL, 
+  convertURLChannelsToChannels, 
+  validateURLChannels, 
+  updateURLWithChannels 
+} from './utils/urlParams';
 import './App.css';
 
 const App: React.FC = () => {
   const [channels, setChannels] = useState<Channel[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Cargar canales desde URL params al inicializar
+  useEffect(() => {
+    const urlChannels = getChannelsFromURL();
+    
+    if (validateURLChannels(urlChannels, MAX_CHANNELS)) {
+      const channelsFromURL = convertURLChannelsToChannels(urlChannels);
+      if (channelsFromURL.length > 0) {
+        setChannels(channelsFromURL);
+      }
+    } else {
+      console.warn(`Se intentaron cargar más de ${MAX_CHANNELS} canales desde la URL`);
+    }
+  }, []);
+
+  // Actualizar URL cuando cambien los canales
+  useEffect(() => {
+    updateURLWithChannels(channels);
+  }, [channels]);
 
   const addChannel = (channelName: string, platform: Platform): boolean => {
     const channelId = createChannelId(platform, channelName);
@@ -60,7 +85,8 @@ const App: React.FC = () => {
         <div className="empty-state">
           <div className="empty-icon">📺</div>
           <h3>No hay canales agregados</h3>
-          <p>Haz clic en el botón + para añadir canales de Twitch o Kick</p>
+          <p>Haz clic en el botón + para añadir canales o usa parámetros URL como:</p>
+          <code>?t=canal1,canal2&k=canal3,canal4</code>
         </div>
       ) : (
         <div className={`channels-grid ${getGridClass()}`}>
