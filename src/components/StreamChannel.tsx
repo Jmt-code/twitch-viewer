@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { StreamChannelProps, Platform, PLATFORM_COLORS, PLATFORM_NAMES } from '../types';
+import TwitchEmbedPlayer from './TwitchEmbedPlayer';
 import { 
   getTwitchEmbedUrl, 
   getTwitchAlternativeUrl, 
@@ -8,6 +9,7 @@ import {
   detectIframeBlock 
 } from '../utils/embedUtils';
 import './StreamChannel.css';
+import './TwitchEmbedPlayer.css';
 
 const StreamChannel: React.FC<StreamChannelProps> = ({ channel, onRemove }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -70,7 +72,7 @@ const StreamChannel: React.FC<StreamChannelProps> = ({ channel, onRemove }) => {
           }
         });
       }
-    }, 8000); // 8 segundos timeout
+    }, 15000); // 15 segundos timeout - más tiempo para cargar
 
     return () => clearTimeout(timer);
   }, [isLoading]);
@@ -95,7 +97,8 @@ const StreamChannel: React.FC<StreamChannelProps> = ({ channel, onRemove }) => {
       </div>
       
       <div className="channel-content">
-        {isLoading && !isBlocked && (
+        {/* Solo mostrar loading para Kick o cuando hay error/bloqueo */}
+        {(channel.platform === Platform.KICK && isLoading && !isBlocked) && (
           <div className="loading-state">
             <div className="spinner"></div>
             <p>Cargando {channel.name} de {PLATFORM_NAMES[channel.platform]}...</p>
@@ -125,17 +128,28 @@ const StreamChannel: React.FC<StreamChannelProps> = ({ channel, onRemove }) => {
           </div>
         )}
 
-        <iframe
-          ref={iframeRef}
-          src={getEmbedUrl()}
-          width="100%"
-          height="100%"
-          allowFullScreen
-          onLoad={handleIframeLoad}
-          onError={handleIframeError}
-          style={{ display: isLoading || hasError || isBlocked ? 'none' : 'block' }}
-          title={`Canal de ${PLATFORM_NAMES[channel.platform]}: ${channel.name}`}
-        />
+        {/* Usar TwitchEmbedPlayer para Twitch, iframe para Kick */}
+        {channel.platform === Platform.TWITCH && !hasError && !isBlocked ? (
+          <TwitchEmbedPlayer 
+            channelName={channel.name}
+            onError={() => {
+              setIsBlocked(true);
+              setHasError(true);
+            }}
+          />
+        ) : channel.platform === Platform.KICK && !hasError && !isBlocked ? (
+          <iframe
+            ref={iframeRef}
+            src={getEmbedUrl()}
+            width="100%"
+            height="100%"
+            allowFullScreen
+            onLoad={handleIframeLoad}
+            onError={handleIframeError}
+            style={{ display: isLoading ? 'none' : 'block' }}
+            title={`Canal de ${PLATFORM_NAMES[channel.platform]}: ${channel.name}`}
+          />
+        ) : null}
       </div>
     </div>
   );
