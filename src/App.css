@@ -1,0 +1,146 @@
+.app {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+  padding: 20px;
+  color: #ffffff;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.app-header h1 {
+  font-size: 2.5rem;
+  margin: 0 0 8px 0;
+  font-weight: 700;
+}
+
+.twitch-purple {
+  color: #9146ff;
+}
+
+.app-header p {
+  color: #888;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.empty-state {
+  text-align: center;
+  margin-top: 80px;
+  color: #888;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 16px;
+}
+
+.empty-state h3 {
+  color: #ffffff;
+  margin: 0 0 8px 0;
+  font-size: 1.5rem;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.channels-grid {
+  display: grid;
+  gap: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Grid layouts basados en el número de canales */
+.grid-1 {
+  grid-template-columns: 1fr;
+  max-width: 800px;
+}
+
+.grid-2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.grid-3 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.grid-3 .twitch-channel:first-child {
+  grid-column: 1 / -1;
+}
+
+.grid-4 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.grid-5 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.grid-5 .twitch-channel:nth-child(1),
+.grid-5 .twitch-channel:nth-child(2) {
+  grid-column: span 1;
+}
+
+.grid-5 .twitch-channel:nth-child(3) {
+  grid-column: 1 / -1;
+}
+
+.grid-6 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+  .grid-3,
+  .grid-4,
+  .grid-5,
+  .grid-6 {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .grid-3 .twitch-channel:first-child,
+  .grid-5 .twitch-channel:nth-child(3) {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .app {
+    padding: 16px;
+  }
+  
+  .app-header h1 {
+    font-size: 2rem;
+  }
+  
+  .channels-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px;
+  }
+  
+  .grid-3 .twitch-channel:first-child,
+  .grid-5 .twitch-channel:nth-child(1),
+  .grid-5 .twitch-channel:nth-child(2),
+  .grid-5 .twitch-channel:nth-child(3) {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .app {
+    padding: 12px;
+  }
+  
+  .app-header h1 {
+    font-size: 1.75rem;
+  }
+  
+  .app-header p {
+    font-size: 1rem;
+  }
+}
