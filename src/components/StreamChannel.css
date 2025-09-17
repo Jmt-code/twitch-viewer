@@ -1,0 +1,128 @@
+.stream-channel {
+  position: relative;
+  background: #1a1a1a;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+}
+
+.stream-channel:hover {
+  transform: translateY(-2px);
+}
+
+.stream-channel.twitch {
+  border-top: 3px solid #9146ff;
+}
+
+.stream-channel.kick {
+  border-top: 3px solid #53fc18;
+}
+
+.channel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #2d2d2d;
+  border-bottom: 1px solid #404040;
+}
+
+.channel-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.platform-badge {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #000;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.channel-name {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: lowercase;
+}
+
+.channel-name::before {
+  content: '#';
+  color: #888;
+  margin-right: 2px;
+}
+
+.remove-button {
+  background: #ff4757;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: background-color 0.2s ease;
+}
+
+.remove-button:hover {
+  background: #ff3742;
+}
+
+.channel-content {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  background: #0f0f0f;
+}
+
+.loading-state, .error-state {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  background: #0f0f0f;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #404040;
+  border-top: 4px solid #9146ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-state p {
+  margin: 4px 0;
+  text-align: center;
+}
+
+.error-state p:first-child {
+  font-weight: 600;
+  color: #ff4757;
+}
+
+.error-state p:last-child {
+  font-size: 14px;
+  color: #888;
+}
